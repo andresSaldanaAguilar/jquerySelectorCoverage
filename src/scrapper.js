@@ -43,7 +43,7 @@ var node_fetch_1 = __importDefault(require("node-fetch"));
 var cheerio_1 = __importDefault(require("cheerio"));
 var sites = require("../inputs/sites.json");
 var selectors = require("../inputs/selectors.json");
-var paths = require("../inputs/paths.json");
+var paths = require("../inputs/path.json");
 var selectorsMap = new Map();
 var sitesMap = new Map();
 sites.map(function (site) { sitesMap.set(site, []); });

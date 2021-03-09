@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import cheerio from 'cheerio';
 const sites = require("../inputs/sites.json");
 const selectors = require("../inputs/selectors.json");
-const paths = require("../inputs/paths.json");
+const paths = require("../inputs/path.json");
 
 let selectorsMap = new Map();
 let sitesMap = new Map();
