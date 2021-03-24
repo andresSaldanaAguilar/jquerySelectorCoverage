@@ -43,30 +43,55 @@ var node_fetch_1 = __importDefault(require("node-fetch"));
 var cheerio_1 = __importDefault(require("cheerio"));
 var sites = require("../inputs/sites.json");
 var selectors = require("../inputs/selectors.json");
-var paths = require("../inputs/path.json");
+var _a = require("../inputs/configs.json"), resourcePath = _a.resourcePath, useBrowserRender = _a.useBrowserRender;
+var puppeteer = require('puppeteer');
 var selectorsMap = new Map();
 var sitesMap = new Map();
 sites.map(function (site) { sitesMap.set(site, []); });
 selectors.map(function (selector) { selectorsMap.set(selector, 0); });
 function scrap() {
     return __awaiter(this, void 0, void 0, function () {
-        var i, response, html, $, _i, selectors_1, selector, error_1;
+        var browser, i, html, page, page, $, _i, selectors_1, selector, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    i = 0;
-                    _a.label = 1;
+                    browser = null;
+                    if (!useBrowserRender) return [3 /*break*/, 2];
+                    return [4 /*yield*/, puppeteer.launch({ headless: false })];
                 case 1:
-                    if (!(i < sites.length)) return [3 /*break*/, 7];
+                    browser = _a.sent();
                     _a.label = 2;
                 case 2:
-                    _a.trys.push([2, 5, , 6]);
-                    return [4 /*yield*/, node_fetch_1.default("" + sites[i] + paths.uri)];
+                    i = 0;
+                    _a.label = 3;
                 case 3:
-                    response = _a.sent();
-                    return [4 /*yield*/, response.text()];
+                    if (!(i < sites.length)) return [3 /*break*/, 15];
+                    _a.label = 4;
                 case 4:
+                    _a.trys.push([4, 13, , 14]);
+                    html = null;
+                    if (!useBrowserRender) return [3 /*break*/, 9];
+                    return [4 /*yield*/, browser.newPage()];
+                case 5:
+                    page = _a.sent();
+                    return [4 /*yield*/, page.goto("" + sites[i] + resourcePath)];
+                case 6:
+                    _a.sent();
+                    return [4 /*yield*/, page.waitForNavigation()];
+                case 7:
+                    _a.sent();
+                    return [4 /*yield*/, page.content()];
+                case 8:
                     html = _a.sent();
+                    return [3 /*break*/, 12];
+                case 9: return [4 /*yield*/, node_fetch_1.default("" + sites[i] + resourcePath)];
+                case 10:
+                    page = _a.sent();
+                    return [4 /*yield*/, page.text()];
+                case 11:
+                    html = _a.sent();
+                    _a.label = 12;
+                case 12:
                     $ = cheerio_1.default.load(html);
                     for (_i = 0, selectors_1 = selectors; _i < selectors_1.length; _i++) {
                         selector = selectors_1[_i];
@@ -78,15 +103,17 @@ function scrap() {
                     console.clear();
                     console.log("Matching selectors (" + Math.round((i * 100) / (sites.length)) + "% completed)\n");
                     console.log(selectorsMap);
-                    return [3 /*break*/, 6];
-                case 5:
+                    return [3 /*break*/, 14];
+                case 13:
                     error_1 = _a.sent();
                     sitesMap.get(sites[i]).push(error_1);
-                    return [3 /*break*/, 6];
-                case 6:
+                    return [3 /*break*/, 14];
+                case 14:
                     i++;
-                    return [3 /*break*/, 1];
-                case 7:
+                    return [3 /*break*/, 3];
+                case 15: return [4 /*yield*/, browser.close()];
+                case 16:
+                    _a.sent();
                     console.clear();
                     console.log(sitesMap);
                     console.log(selectorsMap);

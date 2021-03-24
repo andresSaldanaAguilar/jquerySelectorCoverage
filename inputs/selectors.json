@@ -1,1 +1,6 @@
-[".nav-footer>p", "a#next-page"]
+[
+  ".obituaries-list__results",
+  "li.appear>.obit-wrapper",
+  ".obit-wrapper>a",
+  ".obituaries-list__paginator.pagination>li:nth-child(11)>a"
+]
