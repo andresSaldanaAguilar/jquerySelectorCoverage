@@ -44,11 +44,15 @@ var cheerio_1 = __importDefault(require("cheerio"));
 var sites = require("../inputs/sites.json");
 var selectors = require("../inputs/selectors.json");
 var _a = require("../inputs/configs.json"), resourcePath = _a.resourcePath, useBrowserRender = _a.useBrowserRender;
-var puppeteer = require('puppeteer');
+var puppeteer = require("puppeteer");
 var selectorsMap = new Map();
 var sitesMap = new Map();
-sites.map(function (site) { sitesMap.set(site, []); });
-selectors.map(function (selector) { selectorsMap.set(selector, 0); });
+sites.map(function (site) {
+    sitesMap.set(site, []);
+});
+selectors.map(function (selector) {
+    selectorsMap.set(selector, 0);
+});
 function scrap() {
     return __awaiter(this, void 0, void 0, function () {
         var browser, i, html, page, page, $, _i, selectors_1, selector, error_1;
@@ -65,33 +69,30 @@ function scrap() {
                     i = 0;
                     _a.label = 3;
                 case 3:
-                    if (!(i < sites.length)) return [3 /*break*/, 15];
+                    if (!(i < sites.length)) return [3 /*break*/, 14];
                     _a.label = 4;
                 case 4:
-                    _a.trys.push([4, 13, , 14]);
+                    _a.trys.push([4, 12, , 13]);
                     html = null;
-                    if (!useBrowserRender) return [3 /*break*/, 9];
+                    if (!useBrowserRender) return [3 /*break*/, 8];
                     return [4 /*yield*/, browser.newPage()];
                 case 5:
                     page = _a.sent();
                     return [4 /*yield*/, page.goto("" + sites[i] + resourcePath)];
                 case 6:
                     _a.sent();
-                    return [4 /*yield*/, page.waitForNavigation()];
-                case 7:
-                    _a.sent();
                     return [4 /*yield*/, page.content()];
-                case 8:
+                case 7:
                     html = _a.sent();
-                    return [3 /*break*/, 12];
-                case 9: return [4 /*yield*/, node_fetch_1.default("" + sites[i] + resourcePath)];
-                case 10:
+                    return [3 /*break*/, 11];
+                case 8: return [4 /*yield*/, node_fetch_1.default("" + sites[i] + resourcePath)];
+                case 9:
                     page = _a.sent();
                     return [4 /*yield*/, page.text()];
-                case 11:
+                case 10:
                     html = _a.sent();
-                    _a.label = 12;
-                case 12:
+                    _a.label = 11;
+                case 11:
                     $ = cheerio_1.default.load(html);
                     for (_i = 0, selectors_1 = selectors; _i < selectors_1.length; _i++) {
                         selector = selectors_1[_i];
@@ -101,19 +102,25 @@ function scrap() {
                         }
                     }
                     console.clear();
-                    console.log("Matching selectors (" + Math.round((i * 100) / (sites.length)) + "% completed)\n");
+                    console.log("Matching selectors (" + Math.round((i * 100) / sites.length) + "% completed)\n");
                     console.log(selectorsMap);
-                    return [3 /*break*/, 14];
-                case 13:
+                    return [3 /*break*/, 13];
+                case 12:
                     error_1 = _a.sent();
-                    sitesMap.get(sites[i]).push(error_1);
-                    return [3 /*break*/, 14];
-                case 14:
+                    if (useBrowserRender) {
+                        sitesMap.get(sites[i]).push(error_1);
+                    }
+                    return [3 /*break*/, 13];
+                case 13:
                     i++;
                     return [3 /*break*/, 3];
-                case 15: return [4 /*yield*/, browser.close()];
-                case 16:
+                case 14:
+                    if (!browser) return [3 /*break*/, 16];
+                    return [4 /*yield*/, browser.close()];
+                case 15:
                     _a.sent();
+                    _a.label = 16;
+                case 16:
                     console.clear();
                     console.log(sitesMap);
                     console.log(selectorsMap);
