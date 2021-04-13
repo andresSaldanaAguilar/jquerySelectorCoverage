@@ -35,12 +35,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var node_fetch_1 = __importDefault(require("node-fetch"));
-var cheerio_1 = __importDefault(require("cheerio"));
+exports.__esModule = true;
+var node_fetch_1 = require("node-fetch");
+var cheerioModule = require("cheerio");
 var sites = require("../inputs/sites.json");
 var selectors = require("../inputs/selectors.json");
 var _a = require("../inputs/configs.json"), resourcePath = _a.resourcePath, useBrowserRender = _a.useBrowserRender;
@@ -85,7 +82,7 @@ function scrap() {
                 case 7:
                     html = _a.sent();
                     return [3 /*break*/, 11];
-                case 8: return [4 /*yield*/, node_fetch_1.default("" + sites[i] + resourcePath)];
+                case 8: return [4 /*yield*/, node_fetch_1["default"]("" + sites[i] + resourcePath)];
                 case 9:
                     page = _a.sent();
                     return [4 /*yield*/, page.text()];
@@ -93,11 +90,11 @@ function scrap() {
                     html = _a.sent();
                     _a.label = 11;
                 case 11:
-                    $ = cheerio_1.default.load(html);
+                    $ = cheerioModule.load(html);
                     for (_i = 0, selectors_1 = selectors; _i < selectors_1.length; _i++) {
                         selector = selectors_1[_i];
-                        if ($(selector).length == 1) {
-                            sitesMap.get(sites[i]).push(selector);
+                        if ($(selector).length >= 1) {
+                            sitesMap.get(sites[i]).push(selector + " (" + $(selector).length + ")");
                             selectorsMap.set(selector, selectorsMap.get(selector) + 1);
                         }
                     }

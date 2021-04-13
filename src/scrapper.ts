@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import cheerio from "cheerio";
+import cheerioModule = require("cheerio");
 const sites = require("../inputs/sites.json");
 const selectors = require("../inputs/selectors.json");
 const { resourcePath, useBrowserRender } = require("../inputs/configs.json");
@@ -28,10 +28,10 @@ async function scrap() {
         const page = await fetch(`${sites[i]}${resourcePath}`);
         html = await page.text();
       }
-      const $ = cheerio.load(html);
+      const $ = cheerioModule.load(html);
       for (const selector of selectors) {
-        if ($(selector).length == 1) {
-          sitesMap.get(sites[i]).push(selector);
+        if ($(selector).length >= 1) {
+          sitesMap.get(sites[i]).push(`${selector} (${$(selector).length})`);
           selectorsMap.set(selector, selectorsMap.get(selector) + 1);
         }
       }
