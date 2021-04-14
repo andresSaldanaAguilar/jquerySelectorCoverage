@@ -1,1 +1,18 @@
-[".obit-service"]
+["span:contains('FuneralNet')",
+  "span:contains('Batesville')",
+  "div:contains('Batesville')",
+  "span:contains('CFS')",
+  "div:contains('CFS')",
+  "div:contains('FrontRunner')",
+  "a:contains('FrontRunner')",
+  "font:contains('FrontRunner')",
+  "a:contains('Powered by FrontRunner Professional')",
+  "div:contains('funeralOne')",
+  "span:contains('funeralOne')",
+  "span:contains('FuneralInnovations')",
+  "span:contains('Frazer')",
+  "u:contains('Frazer')",
+  "font:contains('Frazer')",
+  "href:contains('//frazerconsultants.com/')",
+  "a:contains('Frazer')"
+]

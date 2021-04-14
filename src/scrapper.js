@@ -48,15 +48,17 @@ sites.map(function (site) {
     sitesMap.set(site, []);
 });
 selectors.map(function (selector) {
-    selectorsMap.set(selector, 0);
+    selectorsMap.set(selector, []);
 });
 function scrap() {
     return __awaiter(this, void 0, void 0, function () {
-        var browser, i, html, page, page, $, _i, selectors_1, selector, error_1;
+        var browser, found, sitesNotFound, i, html, page, page, $, _i, selectors_1, selector, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     browser = null;
+                    found = false;
+                    sitesNotFound = [];
                     if (!useBrowserRender) return [3 /*break*/, 2];
                     return [4 /*yield*/, puppeteer.launch({ headless: false })];
                 case 1:
@@ -93,14 +95,19 @@ function scrap() {
                     $ = cheerioModule.load(html);
                     for (_i = 0, selectors_1 = selectors; _i < selectors_1.length; _i++) {
                         selector = selectors_1[_i];
-                        if ($(selector).length >= 1) {
+                        // console.log($.root().find('u'));
+                        if ($(selector).length >= 1 && found === false) {
+                            found = true;
                             sitesMap.get(sites[i]).push(selector + " (" + $(selector).length + ")");
-                            selectorsMap.set(selector, selectorsMap.get(selector) + 1);
+                            selectorsMap.get(selector).push("$(" + sites[i] + ")");
+                            // selectorsMap.set(selector, selectorsMap.get(selector) + 1);
                         }
                     }
-                    console.clear();
-                    console.log("Matching selectors (" + Math.round((i * 100) / sites.length) + "% completed)\n");
-                    console.log(selectorsMap);
+                    if (found === false) {
+                        console.log(found, sites[i]);
+                        sitesNotFound.push(sites[i]);
+                    }
+                    found = false;
                     return [3 /*break*/, 13];
                 case 12:
                     error_1 = _a.sent();
@@ -112,16 +119,17 @@ function scrap() {
                     i++;
                     return [3 /*break*/, 3];
                 case 14:
+                    console.clear();
+                    selectorsMap.forEach(function (value, key) {
+                        console.log(key, value.length, value);
+                    });
+                    console.log('sites not found', sitesNotFound);
                     if (!browser) return [3 /*break*/, 16];
                     return [4 /*yield*/, browser.close()];
                 case 15:
                     _a.sent();
                     _a.label = 16;
-                case 16:
-                    console.clear();
-                    console.log(sitesMap);
-                    console.log(selectorsMap);
-                    return [2 /*return*/];
+                case 16: return [2 /*return*/];
             }
         });
     });
