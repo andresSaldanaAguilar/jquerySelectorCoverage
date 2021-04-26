@@ -1,8 +1,13 @@
 import fetch from "node-fetch";
-import cheerio from "cheerio";
-const sites = require("../inputs/sites.json");
-const selectors = require("../inputs/selectors.json");
-const { resourcePath } = require("../inputs/configs.json");
+import cheerioModule = require("cheerio");
+const sites = require("../../inputs/sites.json");
+const selectors = require("../../inputs/selectors.json");
+const {
+  resourcePath,
+  useBrowserRender,
+  headlessBrowser,
+} = require("../../inputs/configs.json");
+const puppeteer = require("puppeteer");
 
 let selectorsMap = new Map();
 let sitesMap = new Map();
@@ -14,13 +19,21 @@ selectors.map((selector: string) => {
 });
 
 export const scrap = async () => {
+  let browser = null;
+  if (useBrowserRender)
+    browser = await puppeteer.launch({ headless: headlessBrowser });
   for (let i = 0; i < sites.length; i++) {
     try {
       let html = null;
-
-      const page = await fetch(`${sites[i]}${resourcePath}`);
-      html = await page.text();
-      const $ = cheerio.load(html);
+      if (useBrowserRender) {
+        const page = await browser.newPage();
+        await page.goto(`${sites[i]}${resourcePath}`);
+        html = await page.content();
+      } else {
+        const page = await fetch(`${sites[i]}${resourcePath}`);
+        html = await page.text();
+      }
+      const $ = cheerioModule.load(html);
       for (const selector of selectors) {
         if ($(selector).length >= 1) {
           sitesMap.get(sites[i]).push(`${selector} (${$(selector).length})`);
@@ -35,9 +48,12 @@ export const scrap = async () => {
       );
       console.log(selectorsMap);
     } catch (error) {
-      sitesMap.get(sites[i]).push(error);
+      if (useBrowserRender) {
+        sitesMap.get(sites[i]).push(error);
+      }
     }
   }
+  if (browser) await browser.close();
   console.clear();
   console.log(sitesMap);
   console.log(selectorsMap);
