@@ -1,8 +1,12 @@
 import fetch from "node-fetch";
 import cheerioModule = require("cheerio");
-const sites = require("../inputs/sites.json");
-const selectors = require("../inputs/selectors.json");
-const { resourcePath, useBrowserRender } = require("../inputs/configs.json");
+const sites = require("../../inputs/sites.json");
+const selectors = require("../../inputs/selectors.json");
+const {
+  resourcePath,
+  useBrowserRender,
+  headlessBrowser,
+} = require("../../inputs/configs.json");
 const puppeteer = require("puppeteer");
 
 let selectorsMap = new Map();
@@ -14,9 +18,10 @@ selectors.map((selector: string) => {
   selectorsMap.set(selector, 0);
 });
 
-async function scrap() {
+export const scrap = async () => {
   let browser = null;
-  if (useBrowserRender) browser = await puppeteer.launch({ headless: false });
+  if (useBrowserRender)
+    browser = await puppeteer.launch({ headless: headlessBrowser });
   for (let i = 0; i < sites.length; i++) {
     try {
       let html = null;
@@ -52,6 +57,4 @@ async function scrap() {
   console.clear();
   console.log(sitesMap);
   console.log(selectorsMap);
-}
-
-scrap();
+};
