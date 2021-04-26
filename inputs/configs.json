@@ -1,5 +1,5 @@
 {
   "resourcePath": "",
-  "useBrowserRender": true,
+  "useBrowserRender": false,
   "headlessBrowser": false
 }
