@@ -27,7 +27,7 @@ This tool helps to know which and how much sites html elements are reached given
 
 # Run
 
-  Run `npm start` to start collecting scraping :sparkles:
+  Run `npm start` to create the coverage report
 
 # Debug
 
