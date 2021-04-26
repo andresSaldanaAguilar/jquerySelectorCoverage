@@ -21,9 +21,9 @@ This tool helps to know which and how much sites html elements are reached given
   "headlessBrowser": false
 }
 ```
-  - If there is a specific path you want to reach on all sites
-  - If browser render is needed (slows down the process but useful when getting 403 error codes or JS code) 
-  - If you need the browser to be headless or not.
+  - `resourcePath` : A specific path you want to reach on all sites
+  - `useBrowserRender` : If browser render is needed (slows down the process but useful when getting 403 error codes or JS code) 
+  - `headlessBrowser` : If you need the browser to be headless or not.
 
 # Run
 
