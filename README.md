@@ -17,4 +17,8 @@ This tool helps to know which and how much sites html elements are reached given
 
 # Run
 
-  Run `npm install` to start collecting the results :sparkles:
+  Run `npm start` to start collecting scraping :sparkles:
+
+# Debug
+
+  Debug can be done on `VSCode` IDE and you just need to go to the debug window and hit debug
