@@ -52,7 +52,7 @@ selectors.map(function (selector) {
 });
 function scrap() {
     return __awaiter(this, void 0, void 0, function () {
-        var browser, found, sitesNotFound, i, html, page, page, $, _i, selectors_1, selector, error_1;
+        var browser, found, sitesNotFound, count, notFoundCount, foundCount, i, html, page, page, error_1, $, _i, selectors_1, selector, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -60,18 +60,24 @@ function scrap() {
                     found = false;
                     sitesNotFound = [];
                     if (!useBrowserRender) return [3 /*break*/, 2];
-                    return [4 /*yield*/, puppeteer.launch({ headless: false })];
+                    return [4 /*yield*/, puppeteer.launch({ headless: true })];
                 case 1:
                     browser = _a.sent();
                     _a.label = 2;
                 case 2:
+                    count = 0;
+                    notFoundCount = 0;
+                    foundCount = 0;
+                    console.log(sites.length);
                     i = 0;
                     _a.label = 3;
                 case 3:
-                    if (!(i < sites.length)) return [3 /*break*/, 14];
+                    if (!(i < sites.length)) return [3 /*break*/, 15];
+                    console.log(count, sites[i]);
+                    count += 1;
                     _a.label = 4;
                 case 4:
-                    _a.trys.push([4, 12, , 13]);
+                    _a.trys.push([4, 13, , 14]);
                     html = null;
                     if (!useBrowserRender) return [3 /*break*/, 8];
                     return [4 /*yield*/, browser.newPage()];
@@ -83,53 +89,68 @@ function scrap() {
                     return [4 /*yield*/, page.content()];
                 case 7:
                     html = _a.sent();
-                    return [3 /*break*/, 11];
-                case 8: return [4 /*yield*/, node_fetch_1["default"]("" + sites[i] + resourcePath)];
+                    return [3 /*break*/, 12];
+                case 8:
+                    _a.trys.push([8, 11, , 12]);
+                    return [4 /*yield*/, node_fetch_1["default"]("" + sites[i] + resourcePath)];
                 case 9:
                     page = _a.sent();
                     return [4 /*yield*/, page.text()];
                 case 10:
                     html = _a.sent();
-                    _a.label = 11;
+                    return [3 /*break*/, 12];
                 case 11:
+                    error_1 = _a.sent();
+                    console.log(error_1);
+                    return [3 /*break*/, 12];
+                case 12:
                     $ = cheerioModule.load(html);
                     for (_i = 0, selectors_1 = selectors; _i < selectors_1.length; _i++) {
                         selector = selectors_1[_i];
-                        // console.log($.root().find('u'));
                         if ($(selector).length >= 1 && found === false) {
                             found = true;
                             sitesMap.get(sites[i]).push(selector + " (" + $(selector).length + ")");
                             selectorsMap.get(selector).push("$(" + sites[i] + ")");
-                            // selectorsMap.set(selector, selectorsMap.get(selector) + 1);
+                            foundCount += 1;
+                            console.log('true');
                         }
                     }
                     if (found === false) {
-                        console.log(found, sites[i]);
+                        // console.log(found, sites[i])
                         sitesNotFound.push(sites[i]);
+                        notFoundCount += 1;
+                        console.log('false');
                     }
+                    // console.log(found, sites[i], i);
                     found = false;
-                    return [3 /*break*/, 13];
-                case 12:
-                    error_1 = _a.sent();
-                    if (useBrowserRender) {
-                        sitesMap.get(sites[i]).push(error_1);
-                    }
-                    return [3 /*break*/, 13];
+                    return [3 /*break*/, 14];
                 case 13:
+                    error_2 = _a.sent();
+                    if (useBrowserRender) {
+                        sitesMap.get(sites[i]).push(error_2);
+                    }
+                    return [3 /*break*/, 14];
+                case 14:
                     i++;
                     return [3 /*break*/, 3];
-                case 14:
+                case 15:
                     console.clear();
                     selectorsMap.forEach(function (value, key) {
                         console.log(key, value.length, value);
                     });
-                    console.log('sites not found', sitesNotFound);
-                    if (!browser) return [3 /*break*/, 16];
+                    console.log('sites not found', sitesNotFound.length, sitesNotFound);
+                    console.log(count, notFoundCount, foundCount);
+                    if (!browser) return [3 /*break*/, 17];
                     return [4 /*yield*/, browser.close()];
-                case 15:
+                case 16:
                     _a.sent();
-                    _a.label = 16;
-                case 16: return [2 /*return*/];
+                    _a.label = 17;
+                case 17:
+                    //   console.clear();
+                    //   console.log(sitesMap);
+                    //   console.log(selectorsMap);
+                    console.log('done');
+                    return [2 /*return*/];
             }
         });
     });

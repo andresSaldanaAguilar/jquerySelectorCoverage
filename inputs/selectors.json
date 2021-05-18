@@ -14,5 +14,15 @@
   "u:contains('Frazer')",
   "font:contains('Frazer')",
   "href:contains('//frazerconsultants.com/')",
-  "a:contains('Frazer')"
+  "a:contains('Frazer')",
+  "span:contains('FuneralTech')",
+  "span:contains('FuneralTech')",
+  "a:contains('FuneralTech')",
+  "div:contains('FuneralTech')",
+  "u:contains('FuneralTech')",
+  "*:contains('Batesville')",
+  "*:contains('Frazer')",
+  "*:contains('FrontRunner')",
+  "*:contains('FuneralOne')",
+  "*:contains('FuneralTech')"
 ]
